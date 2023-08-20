@@ -6,19 +6,31 @@ import Modal2 from './Modal2';
 import Modal1 from './Modal1';
 
 
-function ModalManager() {
-  const { modals, modalData } = useModal();
+const modalComponents = {
+    Modal1: Modal1,
+    Modal2: Modal2,
 
-  return (
-    <div className="modal-container">
-      {modals.map((modalName) => (
-        <React.Fragment key={modalName}>
-          {modalName === 'Modal1' && <Modal1 data={modalData[modalName]} />}
-          {modalName === 'Modal2' && <Modal2 data={modalData[modalName]} />}
-        </React.Fragment>
-      ))}
-    </div>
-  );
+};
+
+
+function ModalManager() {
+    const { modals, modalData } = useModal();
+
+    return (
+        <div className="modal-container">
+            {modals.map((modalName) => {
+                const ModalComponent = modalComponents[modalName];
+                if (!ModalComponent) {
+                    return null;
+                }
+                return (
+                    <React.Fragment key={modalName}>
+                    <ModalComponent key={modalName} data={modalData[modalName]} />
+                    </React.Fragment>
+                )
+            })}
+        </div>
+    );
 }
 
 export default ModalManager;
